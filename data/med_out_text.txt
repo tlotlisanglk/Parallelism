@@ -1,0 +1,1 @@
+Run took 0.636 secondsRun took 2.899 secondsRun took 1.618 secondsRun took 0.976 secondsRun took 1.204 secondsRun took 0.455 secondsRun took 0.399 secondsRun took 0.405 secondsRun took 2.118 secondsRun took 1.708 secondsRun took 1.703 secondsRun took 1.828 secondsRun took 2.113 secondsRun took 1.848 secondsRun took 1.776 seconds
