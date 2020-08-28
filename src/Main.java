@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,54 +9,59 @@ import java.util.concurrent.ForkJoinPool;
 
 public class Main
 {
+
+    static final ForkJoinPool FJPOOL01 = new ForkJoinPool();
     static long startTime = 0;
+    /**
+     * start time method: when the program starts running
+     */
     private static void tick(){
+
         startTime = System.currentTimeMillis();
     }
+
+    /**
+     * @ RETURN the running time of the program
+     */
     private static float tock(){
         return (System.currentTimeMillis() - startTime) / 1000.0f;
     }
-    static final ForkJoinPool fjPool = new ForkJoinPool();
+
+    /**
+     * Reads the args[0] input file and sends the data to the FindBasin class which
+     * returns an arrayList of the basins found which are then written to
+     * args[1] file
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception{
-
-        // pass the path to the file as a parameter
-        tick();
-        File file = new File("data/large_in.txt");
-        Scanner sc = new Scanner(file);
-        String[] size = sc.nextLine().split(" ");
-        String[] data =  sc.nextLine().split(" ");
-        int rows = Integer.parseInt(size[0]);
-        int cols = Integer.parseInt(size[1]);
-        float[][] array = new float[rows][cols];
-        File filee = new File("data/med_check.txt");
-        FileWriter fr = new FileWriter(filee, true);
-
-        for(int i=0; i< rows ; i++) {
-            for(int j=0 ; j<cols;j++) {
-                array[i][j] = Float.parseFloat(data[i+j]);
+        String inFile = args[0], outFile = args[1];
+        Scanner sc = new Scanner(new BufferedReader(new FileReader("data/"+inFile)));
+        while(sc.hasNextDouble()) {
+            int cols = sc.nextInt();
+            int rows =sc.nextInt();
+            float [][] myArray = new float[rows][cols];
+            for (int i=0; i<rows; i++) {
+                for (int j=0; j<cols; j++) {
+                    myArray[i][j] = sc.nextFloat();
+                }
             }
+            tick();
+            ArrayList<String> f = basinTerrain(myArray);
+            float time = tock();
+            File file = new File("data/"+outFile);
+            FileWriter fr = new FileWriter(file, false);
+            fr.write(f.size()+"\n");
+            for(String line: f){
+                String l = line+"\n";
+                fr.write(l);
+            }
+            fr.write("Run time: "+ time +" seconds");
+            fr.close();
         }
-        fr.close();
-
-        ArrayList<String> f = findBasin(array);
-        System.out.println("Basins No. :"+data.length);
-        float time = tock();
-
-        File fileex = new File("data/med_out_text.txt");
-        FileWriter frr = new FileWriter(fileex, true);
-        for(String line: f){
-            String l = line+"\n";
-            frr.write(l);
-        }
-        frr.write("Run took "+ time +" seconds");
-        frr.close();
-        System.out.println(f);
     }
-    static  ArrayList<String>  findBasin(float[][] array)
+    static  ArrayList<String>  basinTerrain(float[][] array)
     {
-        return ForkJoinPool.commonPool().invoke(new FindBasin(array,0,array.length));
-
+        return FJPOOL01.invoke(new FindBasin(array,0,array.length,0,array[0].length));
     }
-
-
 }
