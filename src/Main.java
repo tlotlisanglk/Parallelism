@@ -11,6 +11,7 @@ public class Main
 {
 
     static final ForkJoinPool FJPOOL01 = new ForkJoinPool();
+    static float [][] DATA_ARRAY_READ;
     static long startTime = 0;
     /**
      * start time method: when the program starts running
@@ -39,26 +40,28 @@ public class Main
         Scanner sc = new Scanner(new BufferedReader(new FileReader("data/"+inFile)));
         while(sc.hasNextDouble()) {
             int cols = sc.nextInt();
-            int rows =sc.nextInt();
-            float [][] myArray = new float[rows][cols];
-            for (int i=0; i<rows; i++) {
-                for (int j=0; j<cols; j++) {
-                    myArray[i][j] = sc.nextFloat();
+            int rows = sc.nextInt();
+            DATA_ARRAY_READ = new float[rows][cols];
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    DATA_ARRAY_READ[i][j] = sc.nextFloat();
                 }
             }
-            tick();
-            ArrayList<String> f = basinTerrain(myArray);
-            float time = tock();
-            File file = new File("data/"+outFile);
-            FileWriter fr = new FileWriter(file, false);
-            fr.write(f.size()+"\n");
-            for(String line: f){
-                String l = line+"\n";
-                fr.write(l);
-            }
-            fr.write("Run time: "+ time +" seconds");
-            fr.close();
         }
+        tick();
+        ArrayList<String> f = basinTerrain(DATA_ARRAY_READ);
+        float time = tock();
+        File file = new File("data/"+outFile);
+        FileWriter fr = new FileWriter(file, false);
+        fr.write(f.size()+"\n");
+        for(String line: f){
+            String l = line+"\n";
+            fr.write(l);
+        }
+        fr.write("Run time: "+ time +" seconds");
+        System.out.println(inFile+" run time: "+ time +" seconds");
+        fr.close();
+
     }
     static  ArrayList<String>  basinTerrain(float[][] array)
     {
