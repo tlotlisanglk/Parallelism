@@ -11,7 +11,7 @@ public class Main
 {
 
     static final ForkJoinPool FJPOOL01 = new ForkJoinPool();
-    static float [][] DATA_ARRAY_READ;
+    static float [][] DATA_ARRAY_READ = null;;
     static long startTime = 0;
     /**
      * start time method: when the program starts running
@@ -37,20 +37,43 @@ public class Main
      */
     public static void main(String[] args) throws Exception{
         String inFile = args[0], outFile = args[1];
-        Scanner sc = new Scanner(new BufferedReader(new FileReader("data/"+inFile)));
-        while(sc.hasNextDouble()) {
-            int cols = sc.nextInt();
-            int rows = sc.nextInt();
+        Scanner scanner = new Scanner(new BufferedReader(new FileReader("data/"+inFile)));
+        while(scanner.hasNextLine()) {
+            int rows = scanner.nextInt();
+            int cols = scanner.nextInt();
             DATA_ARRAY_READ = new float[rows][cols];
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    DATA_ARRAY_READ[i][j] = sc.nextFloat();
+                    DATA_ARRAY_READ[i][j] = scanner.nextFloat();
                 }
             }
+            scanner.close();
+            break;
         }
-        tick();
-        ArrayList<String> f = basinTerrain(DATA_ARRAY_READ);
-        float time = tock();
+        ArrayList<Float> timeArray = new ArrayList<>();
+        ArrayList<String> f = new ArrayList<>();
+        //Running the program 20 times.
+        for(int r = 0 ; r<20 ;r++)
+        {
+            if(r!=19) {
+                tick();
+                ArrayList<String> ff = basinTerrain(DATA_ARRAY_READ);
+                float time = tock();
+                System.out.println("Runtime" + r + " takes: " + time + " seconds");
+                timeArray.add(time);
+            }
+            else{
+                tick();
+                f = basinTerrain(DATA_ARRAY_READ);
+                float time = tock();
+                System.out.println("Runtime" + r + " takes: " + time + " seconds");
+                timeArray.add(time);
+            }
+
+        }
+        float total_time = 0;
+        total_time = timeArray.stream().reduce(total_time, Float::sum);
+        System.out.println("Average of all runtimes is: " +total_time/20);
         File file = new File("data/"+outFile);
         FileWriter fr = new FileWriter(file, false);
         fr.write(f.size()+"\n");
@@ -58,13 +81,12 @@ public class Main
             String l = line+"\n";
             fr.write(l);
         }
-        fr.write("Run time: "+ time +" seconds");
-        System.out.println(inFile+" run time: "+ time +" seconds");
+        fr.write("Average run time: "+ total_time/20 +" seconds");
         fr.close();
 
     }
     static  ArrayList<String>  basinTerrain(float[][] array)
     {
-        return FJPOOL01.invoke(new FindBasin(array,0,array.length,0,array[0].length));
+        return FJPOOL01.invoke(new FindBasin(array,0,array.length,array[0].length));
     }
 }

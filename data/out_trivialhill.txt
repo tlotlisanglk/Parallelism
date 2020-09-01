@@ -1,2 +1,2 @@
 0
-Run time: 0.002 seconds
+Average run time: 1.00000005E-4 seconds

@@ -36,16 +36,18 @@ public class SequentialFindBasin {
      */
     public static void main(String[] args) throws Exception{
         String inFile = args[0], outFile = args[1];
-        Scanner sc = new Scanner(new BufferedReader(new FileReader("data/"+inFile)));
-        while(sc.hasNext()) {
-            ROWS = sc.nextInt();
-            COLS = sc.nextInt();
+        Scanner scanner = new Scanner(new BufferedReader(new FileReader("data/"+inFile)));
+        while(scanner.hasNextLine()) {
+            ROWS = scanner.nextInt();
+            COLS = scanner.nextInt();
             DATA_ARRAY_READ = new float[ROWS][COLS];
             for (int i = 0; i < ROWS; i++) {
                 for (int j = 0; j < COLS; j++) {
-                    DATA_ARRAY_READ[i][j] = sc.nextFloat();
+                    DATA_ARRAY_READ[i][j] = scanner.nextFloat();
                 }
             }
+ 	    scanner.close();
+            break;
         }
         ArrayList<String> LIST_INDEXES = new ArrayList<>();
         tick();

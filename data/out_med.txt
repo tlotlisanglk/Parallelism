@@ -129,4 +129,4 @@
 493 448
 494 450
 502 373
-Run time: 0.014 seconds
+Average run time: 0.005149999 seconds
