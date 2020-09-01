@@ -38,13 +38,13 @@ public class Main
     public static void main(String[] args) throws Exception{
         String inFile = args[0], outFile = args[1];
         Scanner scanner = new Scanner(new BufferedReader(new FileReader("data/"+inFile)));
-        while(scanner.hasNextLine()) {
+        while(scanner.hasNext()) {
             int rows = scanner.nextInt();
             int cols = scanner.nextInt();
             DATA_ARRAY_READ = new float[rows][cols];
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    DATA_ARRAY_READ[i][j] = scanner.nextFloat();
+                    DATA_ARRAY_READ[i][j] = Float.parseFloat(scanner.next());
                 }
             }
             scanner.close();
