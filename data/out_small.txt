@@ -1,4 +1,4 @@
 2
 154 212
 165 119
-Average run time: 0.00175 seconds
+Average run time: 0.0018999998 seconds

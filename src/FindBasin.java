@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.concurrent.RecursiveTask;
 
 class FindBasin extends  RecursiveTask<ArrayList<String>> {
-    static final int SEQUENTIAL_THRESHOLD = 1250;
+    static final int SEQUENTIAL_THRESHOLD = 700;
 
     public int lo;
     public int hi;
